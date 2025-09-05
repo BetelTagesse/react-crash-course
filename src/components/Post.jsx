@@ -1,7 +1,5 @@
 import classes from "./Post.module.css";
 
-import React from "react";
-
 const Post = ({ author, body }) => {
   return (
     <div className={classes.post}>
