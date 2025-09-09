@@ -1,22 +1,11 @@
 import { useState, useEffect } from "react";
+
+import { useLoaderData } from "react-router-dom";
 import Post from "./Post";
 import classes from "./PostsList.module.css";
 
 const PostsList = () => {
-  const [isFetching, setIsFetching] = useState(false);
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    async function fetchPosts() {
-      setIsFetching(true);
-      const response = await fetch("http://localhost:8080/posts");
-      const resData = await response.json();
-
-      setPosts(resData.posts);
-      setIsFetching(false);
-    }
-    fetchPosts();
-  }, []);
+  const posts = useLoaderData();
 
   function addPostHandler(postData) {
     fetch("http://localhost:8080/posts", {
@@ -31,23 +20,16 @@ const PostsList = () => {
 
   return (
     <>
-      {/* {isPosting && (
-        <Modal onClose={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Modal>
-      )} */}
-
-      {!isFetching && posts.length === 0 && (
+      {posts.length === 0 && (
         <p style={{ textAlign: "center" }}>There are no posts here yet</p>
       )}
-      {!isFetching && posts.length > 0 && (
+      {posts.length > 0 && (
         <ul className={classes.posts}>
           {posts.map((post) => (
             <Post key={post.author} author={post.author} body={post.body} />
           ))}
         </ul>
       )}
-      {isFetching && <p style={{ textAlign: "center" }}>Loading...</p>}
     </>
   );
 };
